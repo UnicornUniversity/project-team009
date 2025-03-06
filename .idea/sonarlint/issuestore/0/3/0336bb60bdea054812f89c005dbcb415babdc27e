@@ -1,0 +1,6 @@
+
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ò§é£8 ØòÛÖ2
+~
+java:S3305%"\Inject this field value directly into "authenticationManager", the only method that uses it.(¿“†òıÿÿÿÿ8¬ØòÛÖ2
+y
+java:S3305!"\Inject this field value directly into "authenticationManager", the only method that uses it.(„ıŒ•8¬ØòÛÖ2

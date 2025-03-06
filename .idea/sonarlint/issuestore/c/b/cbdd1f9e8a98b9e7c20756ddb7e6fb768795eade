@@ -1,0 +1,13 @@
+
+b	java:S112&"FDefine and throw a dedicated exception instead of using a generic one.(èÛŠ8À¼½ÜÖ2
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Ğ‚´£
+J
+java:S3416"5Update this logger to use "EmployeeController.class".(ÜÜ	
+u
+java:S2139$"XEither log this exception and handle it, or rethrow it with some contextual information.(”ı¾8Ü¼½ÜÖ2
+<
+java:S1452,"&Remove usage of generic wildcard type.(—ùÁ
+Y
+java:S1128">Remove this unused import 'com.wineProject.demo.dto.LoginDto'.(—È©ùÿÿÿÿ
+\
+java:S1128"FRemove this unused import 'com.wineProject.demo.message.LoginMessage'.(Ôà‰‡
