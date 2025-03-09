@@ -23,9 +23,9 @@ public class Employee {
     @Id
     @Column(name = "employee_id", length = 45)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int employeeid;
+    private int employeeId;
     @Column(name = "employee_name", length = 255)
-    private String employeename;
+    private String employeeName;
     @Column(name = "email", length = 255)
     private String email;
     @Column(name = "password", length = 255)
@@ -34,8 +34,8 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    public Employee(String employeename, String email, String password, UserRole role) {
-        this.employeename = employeename;
+    public Employee(String employeeName, String email, String password, UserRole role) {
+        this.employeeName = employeeName;
         this.email = email;
         this.password = password;
         this.role = role;

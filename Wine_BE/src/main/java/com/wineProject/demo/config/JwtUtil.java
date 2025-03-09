@@ -36,9 +36,7 @@ public class JwtUtil {
 
     private void loadKeys() {
         try (InputStream is = new ClassPathResource("keystore.p12").getInputStream()) {
-            System.out.println("🔍 keystorePassword: " + keystorePassword);
-            System.out.println("🔍 keyAlias: " + keyAlias);
-            System.out.println("🔍 keyPassword: " + keyPassword);
+
 
             KeyStore keystore = KeyStore.getInstance("PKCS12");
             keystore.load(is, keystorePassword.toCharArray());

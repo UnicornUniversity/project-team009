@@ -9,7 +9,6 @@ application.properties
 application.yml
 
 # Ignorovat keystore a klíče
-keystore.p12
 private.pem
 public.pem
 

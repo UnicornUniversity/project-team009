@@ -6,10 +6,7 @@ package com.wineProject.demo.role;
  * Time: 12:21
  */
 public enum UserRole {
-    USER,
     ADMIN,
-    AUDIT,
-    OWNER,
-    TECHNICAL_WORKER,
-    DISTRIBUTOR
+    TECH,
+    WORKER,
 }

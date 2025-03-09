@@ -16,8 +16,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmployeeDto {
-    private int employeeid;
-    private String employeename;
+    private int employeeId;
+    private String employeeName;
     private String email;
     private String password;
     private UserRole userRole;

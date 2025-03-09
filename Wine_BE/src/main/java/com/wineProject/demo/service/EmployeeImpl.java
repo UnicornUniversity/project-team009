@@ -39,14 +39,14 @@ public class EmployeeImpl implements EmployeeService, UserDetailsService {
     @Override
     public String addEmployee(EmployeeDto employeeDTO) {
         Employee employee = new Employee(
-                employeeDTO.getEmployeename(),
+                employeeDTO.getEmployeeName(),
                 employeeDTO.getEmail(),
                 passwordEncoder.encode(employeeDTO.getPassword()),
-                employeeDTO.getUserRole() != null ? employeeDTO.getUserRole() : UserRole.USER
+                employeeDTO.getUserRole() != null ? employeeDTO.getUserRole() : UserRole.WORKER
         );
 
         employeeRepo.save(employee);
-        return "User saved: " + employee.getEmployeename();
+        return "User saved: " + employee.getEmployeeName();
     }
     EmployeeDto employeeDTO;
 
