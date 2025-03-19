@@ -1,0 +1,38 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: whiskey
+  datasource:
+    username: whiskey
+    password: whiskey
+    url: jdbc:postgresql://localhost:5432/whiskey
+  liquibase:
+    change-log: db/changelog/db.changelog-master.xml
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  profiles:
+    include: api
+openapi:
+  service:
+    title: Whiskey
+    version: 1
+    url: /
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+#    org.springframework.boot.autoconfigure: DEBUG
+
+keystore:
+  password: heslo123
+  key-alias: myalias
+whiskey:
+  access-token:
+    duration: ${ACCESS_TOKEN_DURATION:1H}
+  refresh-token:
+    duration: ${REFRESH_TOKEN_DURATION:1D}
