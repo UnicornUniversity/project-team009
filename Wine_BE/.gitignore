@@ -4,9 +4,6 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-# Ignorovat konfigurace s hesly
-application.properties
-application.yml
 
 # Ignorovat keystore a klíče
 private.pem
