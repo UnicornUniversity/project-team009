@@ -4,13 +4,12 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
   <changeSet id="2024.04.20.01" author="marek.valentiny" context="default">
-
     <createTable tableName="profiles">
       <column name="id" type="uuid">
         <constraints
-          primaryKey="true" primaryKeyName="pk_profiles"
-          unique="true" uniqueConstraintName="un_profiles_id"
-          nullable="false"/>
+                primaryKey="true" primaryKeyName="pk_profiles"
+                unique="true" uniqueConstraintName="un_profiles_id"
+                nullable="false"/>
       </column>
       <column name="username" type="varchar(128)">
         <constraints unique="true" uniqueConstraintName="un_m_users_username" nullable="false"/>
@@ -36,17 +35,18 @@
     <createTable tableName="refresh_tokens">
       <column name="token" type="text">
         <constraints
-          primaryKey="true" primaryKeyName="pk_refresh_token"
-          unique="true" uniqueConstraintName="un_refresh_token"
-          nullable="false"/>
+                primaryKey="true" primaryKeyName="pk_refresh_token"
+                unique="true" uniqueConstraintName="un_refresh_token"
+                nullable="false"/>
       </column>
       <column name="expires" type="timestamp">
         <constraints nullable="false"/>
       </column>
       <column name="profile" type="uuid">
         <constraints foreignKeyName="fk_refresh_token_profile" referencedTableName="profiles"
-          referencedColumnNames="id"/>
+                     referencedColumnNames="id"/>
       </column>
     </createTable>
   </changeSet>
 </databaseChangeLog>
+
