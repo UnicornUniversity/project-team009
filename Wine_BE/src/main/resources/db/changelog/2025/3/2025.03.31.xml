@@ -1,0 +1,44 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="2025.03.31" author="marek.vu" context="default">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="sensor_data"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="sensor_data">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_sensor_data" nullable="false"/>
+            </column>
+
+            <column name="temperature" type="float8">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="humidity" type="float8">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="timestamp" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="sensor_id" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint
+                tableName="sensor_data"
+                columnNames="timestamp, sensor_id"
+                constraintName="un_sensor_data_timestamp_sensor"/>
+    </changeSet>
+
+
+
+</databaseChangeLog>
