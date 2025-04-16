@@ -53,3 +53,5 @@ t
 DWine_BE/src/main/java/cz/telemetry/whiskey/config/SwaggerConfig.java,5\9\590db1fc86a82175bfa71b79fdb20695c70564b2
 {
 KWine_BE/src/main/java/cz/telemetry/whiskey/config/ProblemConfiguration.java,a\3\a3acb089ff311b5e32ff5a3ba24e8bd45489d9aa
+?
+Wine_BE/pom.xml,8\8\888ef67eab69186ea61a25ca89a59ef4c5d764a6
