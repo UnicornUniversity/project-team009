@@ -1,6 +1,6 @@
 package cz.telemetry.whiskey.service;
 
-import cz.telemetry.whiskey.sensor.SensorDataDto;
+import cz.telemetry.whiskey.security.sensor.SensorDataDto;
 
 import java.time.LocalDate;
 import java.util.Optional;
