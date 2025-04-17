@@ -1,26 +1,25 @@
-# Use a Maven build image to compile the Java application
-FROM maven:3.8.4-openjdk-17-slim AS build
+# 1. Build stage
+FROM maven:3.9.4-eclipse-temurin-17 AS builder
 
-# Copy the source code into the container
-COPY . /app
-
-# Set the working directory to the location of the pom.xml file
 WORKDIR /app
 
-# Build the Java application using Maven (skipping tests)
-RUN mvn clean install -DskipTests
+# Copy Maven config and source code
+COPY pom.xml .
+COPY src ./src
 
-# Use a Java runtime as a base image
-FROM openjdk:17-alpine
+# Build the application without running tests
+RUN mvn clean package -DskipTests
 
-# Set the working directory in the container
+# 2. Runtime stage
+FROM eclipse-temurin:17-jdk-jammy
+
 WORKDIR /app
 
-# Copy the compiled JAR file from the build stage into the runtime container
-COPY --from=build /app/target/whiskey-be-0.0.1-SNAPSHOT.jar /app/whiskey-be-0.0.1-SNAPSHOT.jar
+# Copy built JAR from builder stage
+COPY --from=builder /app/target/*.jar app.jar
 
-# Expose the port your app runs on
+# Expose application port
 EXPOSE 8080
 
-# Command to run the application
-CMD ["java", "-jar", "whiskey-be-0.0.1-SNAPSHOT.jar"]
+# Run the app
+ENTRYPOINT ["java", "-jar", "app.jar"]

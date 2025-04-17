@@ -1,6 +1,6 @@
 package cz.telemetry.whiskey.controller;
 
-import cz.telemetry.whiskey.sensor.SensorDataDto;
+import cz.telemetry.whiskey.security.sensor.SensorDataDto;
 import cz.telemetry.whiskey.service.SensorDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;

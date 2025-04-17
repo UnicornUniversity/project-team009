@@ -1,6 +1,6 @@
 package cz.telemetry.whiskey.repository;
 
-import cz.telemetry.whiskey.sensor.SensorData;
+import cz.telemetry.whiskey.security.sensor.SensorData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

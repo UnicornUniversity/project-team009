@@ -55,3 +55,9 @@ DWine_BE/src/main/java/cz/telemetry/whiskey/config/SwaggerConfig.java,5\9\590db
 KWine_BE/src/main/java/cz/telemetry/whiskey/config/ProblemConfiguration.java,a\3\a3acb089ff311b5e32ff5a3ba24e8bd45489d9aa
 ?
 Wine_BE/pom.xml,8\8\888ef67eab69186ea61a25ca89a59ef4c5d764a6
+J
+Wine_BE/docker-compose.yml,0\2\02a29fc2e4efaf07516339e525f57d3b7d56a3f8
+s
+CWine_BE/src/main/java/cz/telemetry/whiskey/domain/RefreshToken.java,6\4\644e54a2850d8f8e34af6388990217c814df024a
+B
+Wine_BE/Dockerfile,4\4\449a0cb9cd2d02136ea192bb309c1d4da6f9c08e

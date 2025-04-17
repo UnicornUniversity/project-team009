@@ -4,15 +4,15 @@ spring:
   application:
     name: whiskey
   datasource:
-    username: whiskey
-    password: whiskey
-    url: jdbc:postgresql://localhost:5432/whiskey
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
   liquibase:
     change-log: db/changelog/db.changelog-master.xml
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
   profiles:
     include: api
 openapi:
