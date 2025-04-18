@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  backend:
+    build: ./Wine_BE
+    container_name: wine-backend
+    ports:
+      - "8080:8080"
+    networks:
+      - wine-network
+
+  frontend:
+    build: ./Wine_FE
+    container_name: wine-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - wine-network
+
+networks:
+  wine-network:
