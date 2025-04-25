@@ -2,16 +2,24 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    image: marekvu/whiskey-app:latest
     ports:
       - "8080:8080"
     depends_on:
       - db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/whiskeydb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://80.211.202.159:5432/whiskeyDB
       SPRING_DATASOURCE_USERNAME: whiskey
-      SPRING_DATASOURCE_PASSWORD: secret
+      SPRING_DATASOURCE_PASSWORD: whiskey123
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    networks:
+      - whiskey-net
+
+  frontend:
+    build:
+      context: ./Wine_FE
+    ports:
+      - "3000:3000"
     networks:
       - whiskey-net
 
@@ -19,11 +27,12 @@ services:
     image: postgres:15
     restart: always
     environment:
-      POSTGRES_DB: whiskeydb
+      POSTGRES_DB: whiskeyDB
       POSTGRES_USER: whiskey
-      POSTGRES_PASSWORD: secret
+      POSTGRES_PASSWORD: whiskey123
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
     networks:
       - whiskey-net
 
@@ -32,3 +41,7 @@ volumes:
 
 networks:
   whiskey-net:
+
+
+
+
