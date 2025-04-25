@@ -29,8 +29,6 @@ m
 LWine_BE/src/main/java/cz/telemetry/whiskey/repository/ProfileRepository.java,f\f\ff94671e4f8a09472f35676e4bf6cff93927c697
 Å
 QWine_BE/src/main/java/cz/telemetry/whiskey/repository/RefreshTokenRepository.java,a\9\a9b7059fde24e7340b1bdb74b616aa9b5f96af52
-q
-AWine_BE/src/main/java/cz/telemetry/whiskey/sensor/SensorData.java,e\9\e9f948aba21e0147ef8f4771bb410f6aa7b09082
 
 OWine_BE/src/main/java/cz/telemetry/whiskey/repository/SensorDataRepository.java,6\c\6c2e9d0c68f83fb87a1d8269b71ac1c26c8d985c
 }
@@ -39,8 +37,6 @@ MWine_BE/src/main/java/cz/telemetry/whiskey/service/AuthenticationService.java,
 OWine_BE/src/main/java/cz/telemetry/whiskey/service/impl/ProfileServiceImpl.java,a\d\ad1821479e791f360b285c08a31ec4b96e86aeb2
 v
 FWine_BE/src/main/java/cz/telemetry/whiskey/service/ProfileService.java,7\1\7187813b9c83f90fb9c5310966dc4b06a514eace
-t
-DWine_BE/src/main/java/cz/telemetry/whiskey/sensor/SensorDataDto.java,e\f\ef8148903617768f263c2bab4833b9bfe14ce9e2
 y
 IWine_BE/src/main/java/cz/telemetry/whiskey/service/SensorDataService.java,9\1\916b0a22243cd0a057a7ad8031c2aa8cad1b7707
 Ç
@@ -55,9 +51,11 @@ DWine_BE/src/main/java/cz/telemetry/whiskey/config/SwaggerConfig.java,5\9\590db
 KWine_BE/src/main/java/cz/telemetry/whiskey/config/ProblemConfiguration.java,a\3\a3acb089ff311b5e32ff5a3ba24e8bd45489d9aa
 ?
 Wine_BE/pom.xml,8\8\888ef67eab69186ea61a25ca89a59ef4c5d764a6
-J
-Wine_BE/docker-compose.yml,0\2\02a29fc2e4efaf07516339e525f57d3b7d56a3f8
 s
 CWine_BE/src/main/java/cz/telemetry/whiskey/domain/RefreshToken.java,6\4\644e54a2850d8f8e34af6388990217c814df024a
 B
 Wine_BE/Dockerfile,4\4\449a0cb9cd2d02136ea192bb309c1d4da6f9c08e
+J
+Wine_BE/docker.compose.yml,4\0\406906ec38b2a27107bfaf1318ac24046cb4b6b6
+<
+Wine_BE/.env,c\0\c0e7606e64cff8ab36987a3373c89d45e451bf21
