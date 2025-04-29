@@ -5,6 +5,9 @@ target/
 !**/src/test/**/target/
 
 
+**/application.yml
+
+
 # Ignorovat keystore a klíče
 private.pem
 public.pem

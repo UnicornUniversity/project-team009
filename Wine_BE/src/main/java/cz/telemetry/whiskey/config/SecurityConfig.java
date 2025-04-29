@@ -106,8 +106,8 @@ public class SecurityConfig {
   @Bean
   public KeyPair keyPair(
       @Value("classpath:keystore.p12") Resource keystoreResource,
-      @Value("${keystore.password}") String keystorePassword,
-      @Value("${keystore.key-alias}") String keyAlias
+      @Value("${server.ssl.key-store-password}") String keystorePassword,
+      @Value("${server.ssl.key-alias}") String keyAlias
   ) throws Exception {
     final var keyStore = KeyStore.getInstance("PKCS12");
     try (final var is = keystoreResource.getInputStream()) {

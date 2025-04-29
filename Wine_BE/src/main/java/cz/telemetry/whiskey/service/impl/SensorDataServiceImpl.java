@@ -8,7 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.*;
 import java.util.Optional;
 
 /**
@@ -51,4 +51,13 @@ public class SensorDataServiceImpl implements SensorDataService {
    public Optional<Double> getAverageHumidityByDate(LocalDate date) {
         return Optional.ofNullable(repository.getAverageHumidityByDate(date));
     }
+
+    @Override
+    public Optional<Double> getAverageTemperatureBetween(LocalDate start, LocalDate end) {
+        Instant startInstant = start.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        Instant endInstant = end.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
+        return repository.findAverageTemperatureBetween(startInstant, endInstant);
+    }
+
+
 }
