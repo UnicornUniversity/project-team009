@@ -19,5 +19,7 @@ public interface SensorDataService {
 
     Optional<Double> getAverageHumidityByDate(LocalDate date);
 
+    Optional<Double> getAverageTemperatureBetween(LocalDate start, LocalDate end);
+
 
 }

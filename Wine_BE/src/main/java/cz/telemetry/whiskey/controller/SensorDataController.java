@@ -39,12 +39,23 @@ public class SensorDataController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/temperature/average")
+    @GetMapping("/temperature/averageByDay")
     public ResponseEntity<Double> getAverageTemperature(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return sensorDataService.getAverageTemperatureByDate(date)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/temperature/averageBetweenDays")
+    public ResponseEntity<Double> getAverageTemperatureBetween(
+            @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end
+    ) {
+        return sensorDataService.getAverageTemperatureBetween(start, end)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 
     @GetMapping("/humidity/average")
     public ResponseEntity<Double> getAverageHumidity(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
@@ -52,9 +63,5 @@ public class SensorDataController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
-
-
-
 }
 

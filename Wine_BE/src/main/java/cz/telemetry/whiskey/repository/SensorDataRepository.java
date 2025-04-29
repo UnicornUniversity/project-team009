@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -26,6 +27,10 @@ public interface SensorDataRepository extends JpaRepository<SensorData, Long> {
 
     @Query("SELECT AVG(s.humidity) FROM SensorData s WHERE DATE(s.timestamp) = :date")
     Double getAverageHumidityByDate(@Param("date") LocalDate date);
+
+    @Query("SELECT AVG(s.temperature) FROM SensorData s WHERE s.timestamp BETWEEN :start AND :end")
+    Optional<Double> findAverageTemperatureBetween(@Param("start") Instant start, @Param("end") Instant end);
+
 
 
 }
