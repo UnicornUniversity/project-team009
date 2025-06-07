@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -43,6 +44,12 @@ public class SensorDataServiceImpl implements SensorDataService {
                 .map(SensorData::getTemperature);
     }
 
+    public Optional<Double> getCurrentHumidity() {
+        return repository.findTopByOrderByTimestampDesc()
+                .map(SensorData::getHumidity);
+    }
+
+
     public Optional<Double> getAverageTemperatureByDate(LocalDate date) {
                 return Optional.ofNullable(repository.getAverageTemperatureByDate(date));
     }
@@ -58,6 +65,18 @@ public class SensorDataServiceImpl implements SensorDataService {
         Instant endInstant = end.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
         return repository.findAverageTemperatureBetween(startInstant, endInstant);
     }
+
+    @Override
+    public List<SensorData> getSensorDataBetween(Instant from, Instant to) {
+        return repository.findAllByTimestampBetween(from, to);
+    }
+
+    public Optional<Double> getAverageHumidityBetween(LocalDate start, LocalDate end) {
+        Instant from = start.atStartOfDay(ZoneOffset.UTC).toInstant();
+        Instant to = end.plusDays(1).atStartOfDay(ZoneOffset.UTC).toInstant();
+        return repository.findAverageHumidityBetween(from, to);
+    }
+
 
 
 }

@@ -27,6 +27,6 @@ public class ProfileServiceImpl implements ProfileService {
       throw new UserAlreadyExistException(request.username());
     }
     return userRepository.save(
-        new Profile(request.username(), passwordEncoder.encode(request.username()))).getId();
+        new Profile(request.username(), passwordEncoder.encode(request.password()))).getId();
   }
 }
