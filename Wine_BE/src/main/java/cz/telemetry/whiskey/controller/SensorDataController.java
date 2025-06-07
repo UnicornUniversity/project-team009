@@ -1,5 +1,6 @@
 package cz.telemetry.whiskey.controller;
 
+import cz.telemetry.whiskey.security.sensor.SensorData;
 import cz.telemetry.whiskey.security.sensor.SensorDataDto;
 import cz.telemetry.whiskey.service.SensorDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by User: Vu
@@ -39,6 +43,14 @@ public class SensorDataController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/humidity/current")
+    public ResponseEntity<Double> getCurrentHumidity() {
+        return sensorDataService.getCurrentHumidity()
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
     @GetMapping("/temperature/averageByDay")
     public ResponseEntity<Double> getAverageTemperature(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return sensorDataService.getAverageTemperatureByDate(date)
@@ -56,12 +68,31 @@ public class SensorDataController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/humidity/averageBetweenDays")
+    public ResponseEntity<Double> getAverageHumidityBetween(
+            @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end
+    ) {
+        return sensorDataService.getAverageHumidityBetween(start, end)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
-    @GetMapping("/humidity/average")
+    @GetMapping("/humidity/averageByDay")
     public ResponseEntity<Double> getAverageHumidity(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return sensorDataService.getAverageHumidityByDate(date)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/between")
+    public List<SensorData> getSensorDataBetween(
+            @RequestParam("from") Instant from,
+            @RequestParam("to") Instant to
+    ) {
+        return sensorDataService.getSensorDataBetween(from, to);
+    }
+
+
 }
 
