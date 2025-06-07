@@ -36,11 +36,11 @@ graph TD
     L --> M["📝 Track State Change Time"]
     M --> N["✅ Continue Normal Flow"]
     
-    style G fill:#ff9999
-    style H fill:#ffcc99
-    style I fill:#99ff99
-    style J fill:#99ccff
-    style M fill:#ccffcc
+    style G fill:#ff9999,color:#000000
+    style H fill:#ffcc99,color:#000000
+    style I fill:#99ff99,color:#000000
+    style J fill:#99ccff,color:#000000
+    style M fill:#ccffcc,color:#000000
 ```
 
 ### Complete Data Flow with Recovery
@@ -69,13 +69,13 @@ graph TD
     R --> S["📤 Send All 45+ Buffered Items"]
     S --> T["✅ Complete Recovery"]
     
-    style G fill:#ff9999
-    style H fill:#ffcc99
-    style K fill:#99ccff
-    style O fill:#99ff99
-    style Q fill:#99ff99
-    style P fill:#ffff99
-    style R fill:#ccffcc
+    style G fill:#ff9999,color:#000000
+    style H fill:#ffcc99,color:#000000
+    style K fill:#99ccff,color:#000000
+    style O fill:#99ff99,color:#000000
+    style Q fill:#99ff99,color:#000000
+    style P fill:#ffff99,color:#000000
+    style R fill:#ccffcc,color:#000000
 ```
 
 ## 🔧 Technical Implementation
