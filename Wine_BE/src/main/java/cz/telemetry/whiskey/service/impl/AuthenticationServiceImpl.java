@@ -102,7 +102,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     final var userId = userService.registerNewUser(request);
 
     return performLoginForUser(authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.username(), request.username())),
+            new UsernamePasswordAuthenticationToken(request.username(), request.password())),
         userId);
   }
 

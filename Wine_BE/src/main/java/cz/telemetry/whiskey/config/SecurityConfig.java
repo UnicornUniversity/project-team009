@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -70,6 +71,9 @@ public class SecurityConfig {
 
   private final UserDetailServiceImpl userDetailsService;
 
+
+  private final CorsConfigurationSource corsFilter;
+
   /**
    * Configures the security filter chain for the application.
    *
@@ -82,32 +86,73 @@ public class SecurityConfig {
    * @throws Exception If an error occurs while configuring the security settings.
    * @author Marek Valentiny
    */
+//  @Bean
+//  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//    http
+//        .authorizeHttpRequests(authorize -> authorize
+//            .requestMatchers(HttpMethod.GET, SWAGGER_PUBLIC_ENDPOINTS).permitAll()
+//            .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+//            .anyRequest().authenticated()
+//        )
+//        .csrf(AbstractHttpConfigurer::disable)
+//        .cors(cors -> cors.configurationSource(corsFilter()))
+//        .httpBasic(Customizer.withDefaults())
+//        .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()))
+//        .sessionManagement(
+//            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//        .exceptionHandling(exceptions -> exceptions
+//            .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+//            .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
+//        );
+//    return http.build();
+//  }
+
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  @Order(1)
+  public SecurityFilterChain authEndpoints(HttpSecurity http) throws Exception {
     http
-        .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(HttpMethod.GET, SWAGGER_PUBLIC_ENDPOINTS).permitAll()
-            .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-            .anyRequest().authenticated()
-        )
-        .csrf(AbstractHttpConfigurer::disable)
-        .cors(cors -> cors.configurationSource(corsFilter()))
-        .httpBasic(Customizer.withDefaults())
-        .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()))
-        .sessionManagement(
-            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .exceptionHandling(exceptions -> exceptions
-            .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-            .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
-        );
+            .securityMatcher("/auth/**")
+            .authenticationProvider(authenticationProvider())
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(cors -> cors.configurationSource(corsFilter))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     return http.build();
   }
+
+  // 2. Pro všechno ostatní přes JWT
+  @Bean
+  @Order(2)
+  public SecurityFilterChain apiEndpoints(HttpSecurity http) throws Exception {
+    http
+            .authenticationProvider(authenticationProvider())
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers(
+                            "/v3/api-docs/**",
+                            "/swagger-ui/**",
+                            "/swagger-ui.html"
+                    ).permitAll()
+                    .anyRequest().authenticated()
+            )
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(cors -> cors.configurationSource(corsFilter))
+            .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(ex -> ex
+                    .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                    .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
+            );
+    return http.build();
+  }
+
+
+
 
   @Bean
   public KeyPair keyPair(
       @Value("classpath:keystore.p12") Resource keystoreResource,
-      @Value("${keystore.password}") String keystorePassword,
-      @Value("${keystore.key-alias}") String keyAlias
+      @Value("${server.ssl.key-store-password}") String keystorePassword,
+      @Value("${server.ssl.key-alias}") String keyAlias
   ) throws Exception {
     final var keyStore = KeyStore.getInstance("PKCS12");
     try (final var is = keystoreResource.getInputStream()) {
@@ -118,15 +163,15 @@ public class SecurityConfig {
     return new KeyPair(publicKey, privateKey);
   }
 
-  @Bean
-  public UserDetailsService users() {
-    return new InMemoryUserDetailsManager(
-        User.withUsername("user")
-            .password("$2a$12$PQTC6BA5leiAGry3IOLrd.ylLZ0jOOhsMHsKo7A4hJBs5OsHwzUN2")
-            .authorities("app")
-            .build()
-    );
-  }
+//  @Bean
+//  public UserDetailsService users() {
+//    return new InMemoryUserDetailsManager(
+//        User.withUsername("user")
+//            .password("$2a$12$PQTC6BA5leiAGry3IOLrd.ylLZ0jOOhsMHsKo7A4hJBs5OsHwzUN2")
+//            .authorities("app")
+//            .build()
+//    );
+//  }
 
   @Bean
   public CorsConfigurationSource corsFilter() {
@@ -175,13 +220,13 @@ public class SecurityConfig {
     return authenticationConfiguration.getAuthenticationManager();
   }
 
-  @Bean
-  public AuthenticationProvider authenticationProvider() {
+  private AuthenticationProvider authenticationProvider() {
     final var authProvider = new DaoAuthenticationProvider();
     authProvider.setUserDetailsService(userDetailsService);
     authProvider.setPasswordEncoder(passwordEncoder());
     return authProvider;
   }
+
 
   @Bean
   public JwtAuthenticationConverter jwtAuthenticationConverter() {

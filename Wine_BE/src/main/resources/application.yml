@@ -1,20 +1,28 @@
 server:
   port: 8080
+  ssl:
+    enabled: false
+    key-store: classpath:keystore.p12
+    key-store-password: heslo123
+    key-store-type: PKCS12
+    key-alias: myalias
+
 spring:
   application:
     name: whiskey
   datasource:
-    username: whiskey
-    password: whiskey
-    url: jdbc:postgresql://localhost:5432/whiskey
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
   liquibase:
     change-log: db/changelog/db.changelog-master.xml
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
   profiles:
     include: api
+
 openapi:
   service:
     title: Whiskey
@@ -24,13 +32,12 @@ openapi:
 logging:
   level:
     root: INFO
-    org.springframework.web: INFO
-    org.springframework.security: INFO
-#    org.springframework.boot.autoconfigure: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    cz.telemetry.whiskey: DEBUG
 
-keystore:
-  password: heslo123
-  key-alias: myalias
 whiskey:
   access-token:
     duration: ${ACCESS_TOKEN_DURATION:1H}
