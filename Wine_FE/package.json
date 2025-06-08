@@ -1,28 +1,43 @@
 {
   "name": "whiskey-frontend",
   "private": true,
-  "version": "0.0.0",
+
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:mock": "cross-env VITE_USE_MOCK_SENSORS=true vite",
+    "dev:api": "cross-env VITE_USE_MOCK_SENSORS=false vite",
     "build": "vite build",
-    "lint": "eslint .",
+    "build:mock": "cross-env VITE_USE_MOCK_SENSORS=true vite build",
+    "build:api": "cross-env VITE_USE_MOCK_SENSORS=false vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@mui/icons-material": "^7.0.1",
-    "@mui/material": "^7.0.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "@emotion/react": "^11.10.8",
+    "@emotion/styled": "^11.10.8",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.12.3",
+    "@mui/x-date-pickers": "^5.0.20",
+    "axios": "^1.4.0",
+    "date-fns": "^2.30.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.11.0",
+    "recharts": "^2.6.2"
+
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
+
+    "cross-env": "^7.0.3",
     "eslint": "^9.21.0",
+    "eslint-plugin-react": "^7.33.2",
+
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",

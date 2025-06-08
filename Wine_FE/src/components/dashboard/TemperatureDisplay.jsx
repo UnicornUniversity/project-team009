@@ -2,26 +2,26 @@ import { useState, useEffect, useRef } from "react";
 import {
   Box,
   Typography,
-  Modal,
-  IconButton,
   Fade,
   Chip,
-  Tooltip,
   useTheme,
   alpha,
+  Modal,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import WaterDropIcon from "@mui/icons-material/WaterDrop";
-import HumiditySettings from "./HumiditySettings";
+import ThermostatIcon from "@mui/icons-material/Thermostat";
+import TemperatureSettings from "./TemperatureSettings";
 import AnimatedStat from "../common/AnimatedStat";
 import ContentLoader from "../common/ContentLoader";
 import DashboardCard from "../common/DashboardCard";
 import RangeIndicator from "../common/RangeIndicator";
 import {
-  getCurrentHumidity,
+  getCurrentTemperature,
   getSensorDataBetweenDates,
 } from "../../services/sensors";
-import { generateHumidity } from "../../services/mockData";
+import { generateTemperature } from "../../services/mockData";
 import { keyframes } from "@emotion/react";
 
 const USE_MOCK_FOR_SENSORS =
@@ -46,15 +46,15 @@ const pulse = keyframes`
   }
 `;
 
-const HumidityDisplay = () => {
+const TemperatureDisplay = () => {
   const theme = useTheme();
-  const [currentHumidity, setCurrentHumidity] = useState(null);
-  const [prevHumidity, setPrevHumidity] = useState(null);
-  const [minHumidity, setMinHumidity] = useState(() => {
-    return Number(localStorage.getItem("minHumidity")) || 45;
+  const [currentTemp, setCurrentTemp] = useState(null);
+  const [prevTemp, setPrevTemp] = useState(null);
+  const [minTemperature, setMinTemperature] = useState(() => {
+    return Number(localStorage.getItem("minTemperature")) || 25;
   });
-  const [maxHumidity, setMaxHumidity] = useState(() => {
-    return Number(localStorage.getItem("maxHumidity")) || 75;
+  const [maxTemperature, setMaxTemperature] = useState(() => {
+    return Number(localStorage.getItem("maxTemperature")) || 35;
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -63,12 +63,12 @@ const HumidityDisplay = () => {
   const [lastRequestTime, setLastRequestTime] = useState(null);
   const [prevDataTimestamp, setPrevDataTimestamp] = useState(null);
   const [validUntil, setValidUntil] = useState(() => {
-    const stored = localStorage.getItem("humidityValidUntil");
+    const stored = localStorage.getItem("temperatureValidUntil");
     return stored ? new Date(stored) : null;
   });
-  const lastHumidityRef = useRef(null);
+  const lastTempRef = useRef(null);
 
-  const fetchHumidity = async () => {
+  const fetchTemperature = async () => {
     const requestTime = new Date();
 
     try {
@@ -76,16 +76,16 @@ const HumidityDisplay = () => {
       setError(null);
 
       try {
-        let newHumidity, newSensorTimestamp;
+        let newTemp, newSensorTimestamp;
 
         if (USE_MOCK_FOR_SENSORS) {
-          newHumidity = await getCurrentHumidity();
+          newTemp = await getCurrentTemperature();
           newSensorTimestamp = new Date();
 
           const previousMinute = new Date();
           previousMinute.setMinutes(previousMinute.getMinutes() - 1);
-          const mockPrevHumidity = parseFloat(generateHumidity(previousMinute));
-          setPrevHumidity(mockPrevHumidity);
+          const mockPrevTemp = parseFloat(generateTemperature(previousMinute));
+          setPrevTemp(mockPrevTemp);
           setPrevDataTimestamp(
             new Date(newSensorTimestamp.getTime() - 60 * 1000)
           );
@@ -109,7 +109,7 @@ const HumidityDisplay = () => {
             );
 
             const latestReading = sortedData[sortedData.length - 1];
-            newHumidity = latestReading.humidity;
+            newTemp = latestReading.temperature;
             newSensorTimestamp = new Date(latestReading.timestamp);
 
             const targetTime = new Date(
@@ -134,30 +134,30 @@ const HumidityDisplay = () => {
             }
 
             if (previousReading) {
-              setPrevHumidity(previousReading.humidity);
+              setPrevTemp(previousReading.temperature);
               setPrevDataTimestamp(new Date(previousReading.timestamp));
-            } else if (currentHumidity !== null) {
-              setPrevHumidity(currentHumidity);
+            } else if (currentTemp !== null) {
+              setPrevTemp(currentTemp);
               setPrevDataTimestamp(dataTimestamp);
             }
           } else {
-            newHumidity = await getCurrentHumidity();
+            newTemp = await getCurrentTemperature();
             newSensorTimestamp = requestTime;
 
-            if (currentHumidity !== null) {
-              setPrevHumidity(currentHumidity);
+            if (currentTemp !== null) {
+              setPrevTemp(currentTemp);
               setPrevDataTimestamp(dataTimestamp);
             }
           }
         }
 
-        setCurrentHumidity(newHumidity);
+        setCurrentTemp(newTemp);
         setDataTimestamp(newSensorTimestamp);
         setLastRequestTime(requestTime);
-        lastHumidityRef.current = newHumidity;
+        lastTempRef.current = newTemp;
       } catch (err) {
-        console.error("Error fetching humidity data:", err);
-        setError(err.message || "Nepodařilo se načíst data o vlhkosti");
+        console.error("Failed to fetch temperature:", err);
+        setError(err.message || "Nepodařilo se načíst data o teplotě");
         setLastRequestTime(requestTime);
       }
     } finally {
@@ -166,27 +166,27 @@ const HumidityDisplay = () => {
   };
 
   useEffect(() => {
-    fetchHumidity();
-    const interval = setInterval(fetchHumidity, 30 * 1000);
+    fetchTemperature();
+    const interval = setInterval(fetchTemperature, 30 * 1000);
 
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     if (validUntil && new Date() > validUntil) {
-      setMinHumidity(45);
-      setMaxHumidity(75);
+      setMinTemperature(25);
+      setMaxTemperature(35);
       setValidUntil(null);
-      localStorage.removeItem("minHumidity");
-      localStorage.removeItem("maxHumidity");
-      localStorage.removeItem("humidityValidUntil");
+      localStorage.removeItem("minTemperature");
+      localStorage.removeItem("maxTemperature");
+      localStorage.removeItem("temperatureValidUntil");
     }
   }, [validUntil]);
 
   useEffect(() => {
-    localStorage.setItem("minHumidity", minHumidity);
-    localStorage.setItem("maxHumidity", maxHumidity);
-  }, [minHumidity, maxHumidity]);
+    localStorage.setItem("minTemperature", minTemperature);
+    localStorage.setItem("maxTemperature", maxTemperature);
+  }, [minTemperature, maxTemperature]);
 
   const handleOpenSettings = () => {
     setSettingsOpen(true);
@@ -197,29 +197,29 @@ const HumidityDisplay = () => {
   };
 
   const handleSaveSettings = (settings) => {
-    setMinHumidity(settings.minHumidity);
-    setMaxHumidity(settings.maxHumidity);
+    setMinTemperature(settings.minTemperature);
+    setMaxTemperature(settings.maxTemperature);
 
     if (settings.validityPeriod) {
       const validityDate = new Date(settings.validityPeriod);
       setValidUntil(validityDate);
-      localStorage.setItem("humidityValidUntil", validityDate.toISOString());
+      localStorage.setItem("temperatureValidUntil", validityDate.toISOString());
     } else {
       setValidUntil(null);
-      localStorage.removeItem("humidityValidUntil");
+      localStorage.removeItem("temperatureValidUntil");
     }
 
     setSettingsOpen(false);
   };
 
-  const getHumidityStatus = () => {
-    if (currentHumidity === null) return null;
-    if (currentHumidity < minHumidity) return "low";
-    if (currentHumidity > maxHumidity) return "high";
+  const getTemperatureStatus = () => {
+    if (currentTemp === null) return null;
+    if (currentTemp < minTemperature) return "low";
+    if (currentTemp > maxTemperature) return "high";
     return "optimal";
   };
 
-  const humidityStatus = getHumidityStatus();
+  const tempStatus = getTemperatureStatus();
 
   const getStatusChip = (status) => {
     if (!status) return null;
@@ -256,7 +256,7 @@ const HumidityDisplay = () => {
   };
 
   const actionButton = (
-    <Tooltip title="Nastavení limitů vlhkosti" arrow>
+    <Tooltip title="Nastavení limitů teploty" arrow>
       <IconButton
         aria-label="settings"
         onClick={handleOpenSettings}
@@ -275,14 +275,14 @@ const HumidityDisplay = () => {
 
   return (
     <DashboardCard
-      title="Vlhkost"
-      accentColor={theme.palette.info.main}
-      tooltip="Aktuální vlhkost vzduchu ve skladu whiskey"
-      chipContent={humidityStatus && getStatusChip(humidityStatus)}
+      title="Teplota"
+      accentColor={theme.palette.warning.main}
+      tooltip="Aktuální teplota ve skladu whiskey"
+      chipContent={tempStatus && getStatusChip(tempStatus)}
       action={actionButton}
     >
-      {loading && !currentHumidity ? (
-        <ContentLoader message="Načítání dat vlhkosti..." />
+      {loading && !currentTemp ? (
+        <ContentLoader message="Načítání teplotních dat..." />
       ) : error ? (
         <Box
           display="flex"
@@ -318,9 +318,7 @@ const HumidityDisplay = () => {
                     height: 80,
                     borderRadius: "50%",
                     backgroundColor:
-                      humidityStatus === "optimal"
-                        ? "success.main"
-                        : "error.main",
+                      tempStatus === "optimal" ? "success.main" : "error.main",
                     opacity: 0.6,
                     animation: `${pulse} 2s infinite ease-in-out`,
                   }}
@@ -339,8 +337,8 @@ const HumidityDisplay = () => {
                     zIndex: 1,
                   }}
                 >
-                  <WaterDropIcon
-                    color={humidityStatus === "optimal" ? "success" : "error"}
+                  <ThermostatIcon
+                    color={tempStatus === "optimal" ? "success" : "error"}
                     sx={{ fontSize: 36 }}
                   />
                 </Box>
@@ -350,23 +348,23 @@ const HumidityDisplay = () => {
 
           <AnimatedStat
             label="Aktuální hodnota"
-            value={currentHumidity}
-            previousValue={prevHumidity}
-            unit="%"
+            value={currentTemp}
+            previousValue={prevTemp}
+            unit="°C"
             large
             delay={300}
             color={
-              humidityStatus === "optimal"
+              tempStatus === "optimal"
                 ? theme.palette.success.main
                 : theme.palette.error.main
             }
             trendTooltip={
-              prevHumidity !== null ? (
+              prevTemp !== null ? (
                 <Box>
                   <Typography variant="body2" sx={{ fontWeight: "bold" }}>
                     Předchozí hodnota
                   </Typography>
-                  <Typography variant="body2">{prevHumidity}%</Typography>
+                  <Typography variant="body2">{prevTemp}°C</Typography>
                   <Typography variant="caption" sx={{ opacity: 0.8 }}>
                     {prevDataTimestamp
                       ? `Zaznamenaná: ${formatTimestampWithSeconds(
@@ -382,14 +380,14 @@ const HumidityDisplay = () => {
           />
 
           <RangeIndicator
-            currentValue={currentHumidity}
-            minValue={minHumidity}
-            maxValue={maxHumidity}
-            label="Rozsah vlhkosti"
-            unit="%"
+            currentValue={currentTemp}
+            minValue={minTemperature}
+            maxValue={maxTemperature}
+            label="Rozsah teplot"
+            unit="°C"
             delay={600}
             color={
-              humidityStatus === "optimal"
+              tempStatus === "optimal"
                 ? theme.palette.success.main
                 : theme.palette.error.main
             }
@@ -420,14 +418,14 @@ const HumidityDisplay = () => {
       <Modal
         open={settingsOpen}
         onClose={handleCloseSettings}
-        aria-labelledby="humidity-settings-modal"
+        aria-labelledby="temperature-settings-modal"
       >
         <Box>
-          <HumiditySettings
+          <TemperatureSettings
             initialValues={{
-              minHumidity,
-              maxHumidity,
-              validityDate: validUntil || null,
+              minTemperature,
+              maxTemperature,
+              validityDate: validUntil,
             }}
             onSave={handleSaveSettings}
             onCancel={handleCloseSettings}
@@ -438,4 +436,4 @@ const HumidityDisplay = () => {
   );
 };
 
-export default HumidityDisplay;
+export default TemperatureDisplay;
