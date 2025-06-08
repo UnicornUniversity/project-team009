@@ -22,6 +22,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+
       <ErrorBoundary>
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={cs}>
           <AuthProvider>
@@ -77,6 +78,7 @@ function App() {
           </AuthProvider>
         </LocalizationProvider>
       </ErrorBoundary>
+
     </ThemeProvider>
   );
 }
